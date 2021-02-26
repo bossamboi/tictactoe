@@ -1,0 +1,1 @@
+This project's objective is to create a browser tic-tac-toe game that a player can play with a second player or with an AI. The goal is to code the project with as few global variables as possible and practice utilizing private and public functions.
