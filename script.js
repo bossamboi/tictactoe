@@ -8,11 +8,22 @@ const createPlayer = (name, marker) => {
 const gameBoard = (() => {
     
     let board = [];
-    for (i = 0; i < 9; i++) {
-        board.push[''];
+    for (let i = 0; i < 9; i++) {
+        board.push('');
     }
 
-    
+    console.log(board);
+
+    //populate board with squares 
+    let squareContainer = document.querySelector('#square-container');
+
+    for (let i = 0; i < board.length; i++) {
+        let squareDiv = document.createElement('div');
+        squareDiv.classList.add('square-class');
+        squareContainer.appendChild(squareDiv);
+    }
+
+
 
 })();
 
