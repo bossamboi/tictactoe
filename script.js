@@ -35,13 +35,79 @@ const gameBoard = (() => {
         squareContainer.appendChild(squareDiv);
     }
 
-    //does player creation go here?
+    //player creation
     const player1 = createPlayer('Player 1', 'X');
-    let player1Turn = true;
+    let player1Turn = true; //turn toggle
     const player2 = createPlayer('Player 2', 'O');
 
     let squares = document.querySelectorAll('.square-class');
 
+    const button = document.querySelector('#restart');
+    const message = document.querySelector('#message');
+
+    const displayTurn = (player1Turn) => {
+        return player1Turn ? message.textContent = 'X, your turn' : message.textContent = 'O, your turn';
+    }
+
+    const stopGame = () => {
+        button.textContent = 'Play Again?';
+        squares.forEach(square => {
+            if (!square.textContent) {
+                square.textContent = ' ';
+                square.classList.remove('hover');
+            }
+        })
+    }
+
+    //check if board is filled
+    const boardFilled = () => {
+        if (board.indexOf('') === -1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    //get array of marker indices
+    const getIndices = (marker) => {
+        let xoArray = [];
+        for (let i = 0; i < board.length; i++) {
+            if (board[i] === marker) {
+                xoArray.push(i);
+            }
+        }
+        return xoArray;
+    }
+
+
+    //compare winning combos to marker indices
+    const check4Winner = () => {
+        let xArray = getIndices(player1.marker);
+        let oArray = getIndices(player2.marker);
+        let winnerExists = false;
+
+        for (let i = 0; i < winningCombos.length; i++) {
+            if (winningCombos[i].every(index => { return xArray.indexOf(index) !== -1; })) {
+                stopGame();
+                message.textContent = player1.name + ' wins';
+                winnerExists = true;
+                break;
+            } else if (winningCombos[i].every(index => { return oArray.indexOf(index) !== -1; })) {
+                message.textContent = player2.name + ' wins';
+                stopGame();
+                winnerExists = true;
+                break;
+            }
+        }
+
+        if (boardFilled() && !winnerExists) {
+            message.textContent = 'cat\'s game';
+            console.log(board);
+            stopGame();
+        }
+    }
+
+    //game flow and interaction
     squares.forEach(square => {
         square.addEventListener('click', () => {
             if (!square.textContent) {
@@ -55,60 +121,24 @@ const gameBoard = (() => {
                 board[+(square.dataset.index)] = square.textContent;
                 console.log(board);
                 square.classList.remove('hover');
+                displayTurn(player1Turn);
                 check4Winner();
             }
-
-
-
         })
     })
 
-
-    const boardFilled = () => {
-        if (board.indexOf('') === -1) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    const check4Winner = () => {
-        let xArray = getIndices(player1.marker);
-        let oArray = getIndices(player2.marker);
-
-        for (let i = 0; i < winningCombos.length; i++) {
-            if (winningCombos[i].every(index => { return xArray.indexOf(index) !== -1; })) {
-                console.log(player1.name + ' wins');
-                break;
-            } else if (winningCombos[i].every(index => { return oArray.indexOf(index) !== -1; })) {
-                console.log(player2.name + ' wins');
-                break;
-            } else if (boardFilled()) {
-                console.log('cat\'s game');
-                break;
-            }
-        }
-    }
-
-    const getIndices = (marker) => {
-        let xoArray = [];
+    button.addEventListener('click', () => {
         for (let i = 0; i < board.length; i++) {
-            if (board[i] === marker) {
-                xoArray.push(i);
-            }
+            board[i] = '';
         }
-        return xoArray;
-    }
 
+        squares.forEach(square => {
+            square.textContent = '';
+            square.classList.add('hover');
+        })
 
-
+        player1Turn = true;
+        message.textContent = 'X goes first';
+    })
 })();
 
-
-//game play object
-const gamePlay = (() => {
-    // const player1 = createPlayer('Eric', 'X');
-    // const player2 = createPlayer('Angela', 'O');
-
-
-})();
