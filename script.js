@@ -89,11 +89,11 @@ const gameBoard = (() => {
         for (let i = 0; i < winningCombos.length; i++) {
             if (winningCombos[i].every(index => { return xArray.indexOf(index) !== -1; })) {
                 stopGame();
-                message.textContent = player1.name + ' wins';
+                message.textContent = player1.marker + ' wins';
                 winnerExists = true;
                 break;
             } else if (winningCombos[i].every(index => { return oArray.indexOf(index) !== -1; })) {
-                message.textContent = player2.name + ' wins';
+                message.textContent = player2.marker + ' wins';
                 stopGame();
                 winnerExists = true;
                 break;
@@ -139,6 +139,7 @@ const gameBoard = (() => {
 
         player1Turn = true;
         message.textContent = 'X goes first';
+        button.textContent = 'Restart';
     })
 })();
 
